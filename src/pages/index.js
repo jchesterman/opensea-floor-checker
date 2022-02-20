@@ -6,6 +6,7 @@ const IndexPage = () => {
   const walletRef = React.useRef(null);
   const [collections, setCollections] = React.useState([]);
   const [filteredCollections, setFilteredCollections] = React.useState([]);
+  const [numRugged, setNumRugged] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [ethPrice, setEthPrice] = React.useState(null);
   const [currency, setCurrency] = React.useState('cad');
@@ -26,14 +27,15 @@ const IndexPage = () => {
   }, []);
 
   async function onSubmit(e) {
+    setCollections([]);
     e.preventDefault();
+    setLoading(true);
     const wallet = walletRef.current.value;
     if (!wallet) return;
     const options = {method: 'GET'}
     const collections = await fetch(`https://api.opensea.io/api/v1/collections?offset=0&limit=300&asset_owner=${wallet}`, options);
     const colResponse = await collections.json();
 
-    setLoading(true);
     const collectionsArr = await Promise.all(
       colResponse.map(async collection => {
         const stats = await fetch(`https://api.opensea.io/api/v1/collection/${collection.slug}/stats`, options);
@@ -41,14 +43,15 @@ const IndexPage = () => {
         return {
           name: collection.name,
           owned: collection.owned_asset_count,
-          floorPrice: statsResp.stats.floor_price || 'prolly rugged lol',
+          floorPrice: statsResp.stats.floor_price || '0',
           rugged: !statsResp.stats.floor_price,
           totalEthValue: collection.owned_asset_count * statsResp.stats.floor_price
         }
       })
     );    
     setLoading(false);
-    collectionsArr.sort((a, b) => a.floorPrice - b.floorPrice);
+    collectionsArr.sort((a, b) => b.floorPrice - a.floorPrice);
+    setNumRugged(collectionsArr.filter(collection => collection.rugged).length);
     setCollections(collectionsArr);
     setWalletTotalValue(collectionsArr.reduce((sum, current) => sum + current.totalEthValue, 0));
     setTotalHolding(collectionsArr.reduce((sum, current) => sum + current.owned, 0));
@@ -73,7 +76,7 @@ const IndexPage = () => {
       <Box p="40px">
         <Flex mb="20px" justifyContent="flex-end">
             {ethPrice &&
-              <Text color="green.500">ETH: ${ethPrice}<sup>({currency})</sup></Text>}
+              <Text color="green.500">ETH: ${ethPrice}<sup>({currency.toUpperCase()})</sup></Text>}
         </Flex>
         <Box mb="2em">
           <form onSubmit={onSubmit} method="POST">
@@ -85,7 +88,8 @@ const IndexPage = () => {
           </form>
         </Box>
         {loaded && <Text mb="20px">This wallet currently holds {totalHolding} nfts, 
-          worth {Math.round(walletTotalValue)} ETH or ${Math.round(walletTotalValue * ethPrice)} {currency} if sold at their current floor prices</Text>}
+          worth {Math.round(walletTotalValue)} ETH or ${Math.round(walletTotalValue * ethPrice)} {currency.toUpperCase()} if sold at their current floor prices</Text>}
+        {numRugged !== 0 && <Box mb="30px">There are {numRugged} potentially rugged collections (floor price of 0)</Box>}
         {collections.length > 0 && <Box w="420px" mb="40px">
             <Input onChange={handleSearchUpdate} placeholder="Search for a collection" />
           </Box>}
