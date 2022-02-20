@@ -1,5 +1,5 @@
 import * as React from "react"
-import {Box, Input, Spinner, Button, Flex, filter} from '@chakra-ui/react';
+import {Box, Input, Spinner, Button, Flex, Text} from '@chakra-ui/react';
 import CollectionRow from "../components/CollectionRow";
 
 const IndexPage = () => {
@@ -7,6 +7,17 @@ const IndexPage = () => {
   const [collections, setCollections] = React.useState([]);
   const [filteredCollections, setFilteredCollections] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [eth, setEth] = React.useState(null);
+  const [currency, setCurrency] = React.useState('CAD');
+
+  React.useEffect(() => {
+    async function getEthToFiat() {
+      let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
+      response = await response.json();
+      setEth(response.data.ETH);
+    }
+    getEthToFiat();
+  }, []);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -41,13 +52,9 @@ const IndexPage = () => {
 
   function handleSearchUpdate(e) {
     e.preventDefault();
-    const searchValue = e.target.value.toLowerCase();;
-    const filtered = collections.filter(collection => {
-      const name = collection.name.toLowerCase();
-      if (name.includes(searchValue)) {
-        return collection;
-      }
-    });
+    const searchValue = e.target.value.toLowerCase();
+    const filtered = collections.filter(collection => collection.name.toLowerCase()
+      .includes(searchValue));
     setFilteredCollections(filtered);
     return false;
   };
@@ -58,6 +65,10 @@ const IndexPage = () => {
     <main>  
       <title>Home Page</title>
       <Box p="40px">
+        <Flex mb="20px" justifyContent="flex-end">
+            {eth && eth.quote && 
+              <Text color="green.500">ETH: ${eth.quote[currency].price}<sup>({currency})</sup></Text>}
+        </Flex>
         <Box mb="2em">
           <form onSubmit={onSubmit} method="POST">
             <Flex alignItems="center">
@@ -73,7 +84,7 @@ const IndexPage = () => {
         <Box>
           {filtered.length > 0 && filtered.map(collection => {
             return (
-              <CollectionRow key={collection.name} collection={collection}/>
+              <CollectionRow currency={currency} price={eth.quote[currency].price} key={collection.name} collection={collection}/>
             );
           })}
         </Box>
