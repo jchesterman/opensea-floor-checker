@@ -21,7 +21,7 @@ const CollectionRow = ({currency, price, collection}) => {
       <Flex justifyContent="space-between">
         <Box>
           <Text color="black">Currently holding: {collection.owned}</Text>
-          <Text color="black">Current value in {currency}: {Math.round(value)}</Text>
+          <Text color="black">Current floor value in {currency}: {Math.round(value)}</Text>
         </Box>
       </Flex>
     </Box>

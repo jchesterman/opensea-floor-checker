@@ -10,6 +10,8 @@ const IndexPage = () => {
   const [ethPrice, setEthPrice] = React.useState(null);
   const [currency, setCurrency] = React.useState('cad');
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
+  const [totalHolding, setTotalHolding] = React.useState(null);
+  const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
     async function getEthToFiat() {
@@ -49,6 +51,8 @@ const IndexPage = () => {
     collectionsArr.sort((a, b) => a.floorPrice - b.floorPrice);
     setCollections(collectionsArr);
     setWalletTotalValue(collectionsArr.reduce((sum, current) => sum + current.totalEthValue, 0));
+    setTotalHolding(collectionsArr.reduce((sum, current) => sum + current.owned, 0));
+    setLoaded(true);
     return false;
   }
 
@@ -80,10 +84,8 @@ const IndexPage = () => {
             </Flex>
           </form>
         </Box>
-        {walletTotalValue && <Box mb="20px">ETH Value: {walletTotalValue} 
-          <br/>
-          {currency} value: {Math.round(walletTotalValue * ethPrice)}
-        </Box>}
+        {loaded && <Text mb="20px">This wallet currently holds {totalHolding} nfts, 
+          worth {Math.round(walletTotalValue)} ETH or ${Math.round(walletTotalValue * ethPrice)} {currency} if sold at their current floor prices</Text>}
         {collections.length > 0 && <Box w="420px" mb="40px">
             <Input onChange={handleSearchUpdate} placeholder="Search for a collection" />
           </Box>}
