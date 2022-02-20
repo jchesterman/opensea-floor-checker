@@ -4,7 +4,6 @@ export default async function handler(req, res) {
 
   let response = null;
   const apiPrefix = process.env.NODE_ENV === 'production' ? 'pro' : 'sandbox';
-  console.log('api prefix: ', apiPrefix);
   try {
     response = await axios.get(`https://${apiPrefix}-api.coinmarketcap.com/v2/tools/price-conversion?amount=1&symbol=ETH&convert=CAD,USD`, {
       headers: {
@@ -14,8 +13,8 @@ export default async function handler(req, res) {
   } catch(ex) {
     response = null;
     // error
-    console.log('ERROR HERE: ', ex);
-    res.status(403).json({err: ex})
+    console.log(ex);
+    res.status(403).json({data: 'something went wrong :('})
   }
   if (response) {
     // success

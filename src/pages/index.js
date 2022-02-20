@@ -7,14 +7,18 @@ const IndexPage = () => {
   const [collections, setCollections] = React.useState([]);
   const [filteredCollections, setFilteredCollections] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [eth, setEth] = React.useState(null);
-  const [currency, setCurrency] = React.useState('CAD');
+  const [ethPrice, setEthPrice] = React.useState(null);
+  const [currency, setCurrency] = React.useState('cad');
+  const [walletTotalValue, setWalletTotalValue] = React.useState(null);
 
   React.useEffect(() => {
     async function getEthToFiat() {
-      let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
+      //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
+      let response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&ids=ethereum`, {
+        method: 'GET'
+      });
       response = await response.json();
-      setEth(response.data.ETH);
+      setEthPrice(response[0].current_price);
     }
     getEthToFiat();
   }, []);
@@ -36,17 +40,15 @@ const IndexPage = () => {
           name: collection.name,
           owned: collection.owned_asset_count,
           floorPrice: statsResp.stats.floor_price || 'prolly rugged lol',
-          rugged: !statsResp.stats.floor_price
+          rugged: !statsResp.stats.floor_price,
+          totalEthValue: collection.owned_asset_count * statsResp.stats.floor_price
         }
       })
-    );
-    setLoading(false);
-    
+    );    
     setLoading(false);
     collectionsArr.sort((a, b) => a.floorPrice - b.floorPrice);
- 
     setCollections(collectionsArr);
-
+    setWalletTotalValue(collectionsArr.reduce((sum, current) => sum + current.totalEthValue, 0));
     return false;
   }
 
@@ -66,8 +68,8 @@ const IndexPage = () => {
       <title>Home Page</title>
       <Box p="40px">
         <Flex mb="20px" justifyContent="flex-end">
-            {eth && eth.quote && 
-              <Text color="green.500">ETH: ${eth.quote[currency].price}<sup>({currency})</sup></Text>}
+            {ethPrice &&
+              <Text color="green.500">ETH: ${ethPrice}<sup>({currency})</sup></Text>}
         </Flex>
         <Box mb="2em">
           <form onSubmit={onSubmit} method="POST">
@@ -78,13 +80,17 @@ const IndexPage = () => {
             </Flex>
           </form>
         </Box>
+        {walletTotalValue && <Box mb="20px">ETH Value: {walletTotalValue} 
+          <br/>
+          {currency} value: {Math.round(walletTotalValue * ethPrice)}
+        </Box>}
         {collections.length > 0 && <Box w="420px" mb="40px">
             <Input onChange={handleSearchUpdate} placeholder="Search for a collection" />
           </Box>}
         <Box>
           {filtered.length > 0 && filtered.map(collection => {
             return (
-              <CollectionRow currency={currency} price={eth.quote[currency].price} key={collection.name} collection={collection}/>
+              <CollectionRow currency={currency} price={ethPrice} key={collection.name} collection={collection}/>
             );
           })}
         </Box>

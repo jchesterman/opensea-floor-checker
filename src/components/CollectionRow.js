@@ -3,7 +3,7 @@ import * as React from 'react';
 
 const CollectionRow = ({currency, price, collection}) => {  
 
-  let value = collection.owned * (price * collection.floorPrice);
+  let value = price * collection.totalEthValue;
   if (collection.rugged) value = '0';
 
   return (
