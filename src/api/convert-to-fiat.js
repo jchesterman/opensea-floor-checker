@@ -3,7 +3,7 @@ import axios from 'axios';
 export default async function handler(req, res) {
 
   let response = null;
-  const apiPrefix = process.env.production ? 'pro' : 'sandbox';
+  const apiPrefix = process.env.NODE_ENV === 'production' ? 'pro' : 'sandbox';
   console.log('api prefix: ', apiPrefix);
   try {
     response = await axios.get(`https://${apiPrefix}-api.coinmarketcap.com/v2/tools/price-conversion?amount=1&symbol=ETH&convert=CAD,USD`, {
