@@ -1,6 +1,6 @@
 import * as React from "react"
 import {Box, Input, Spinner, Button, Flex, Text} from '@chakra-ui/react';
-import CollectionRow from "../components/CollectionRow";
+import CollectionList from '../components/CollectionList';
 
 const IndexPage = () => {
   const walletRef = React.useRef(null);
@@ -94,11 +94,7 @@ const IndexPage = () => {
             <Input onChange={handleSearchUpdate} placeholder="Search for a collection" />
           </Box>}
         <Box>
-          {filtered.length > 0 && filtered.map(collection => {
-            return (
-              <CollectionRow currency={currency} price={ethPrice} key={collection.name} collection={collection}/>
-            );
-          })}
+          <CollectionList currency={currency} ethPrice={ethPrice} collections={filtered} />
         </Box>
       </Box>
     </main>
