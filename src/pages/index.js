@@ -86,7 +86,7 @@ const IndexPage = () => {
 
   const filtered = filteredCollections.length > 0 ? filteredCollections : collections;
 
-  const queryString = window && window.location.search;
+  const queryString = window?.location.search;
   const urlParams = new URLSearchParams(queryString);
   const wallet = urlParams.get('wallet');
 
