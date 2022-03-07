@@ -14,6 +14,7 @@ const IndexPage = () => {
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
+  const [queryParam, setQueryParam] = React.useState(null);
 
   React.useEffect(() => {
     async function getEthToFiat() {
@@ -29,6 +30,7 @@ const IndexPage = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const wallet = urlParams.get('wallet');
+    setQueryParam(wallet);
     if (wallet) {
       handleApiResp(wallet);
     }
@@ -68,9 +70,6 @@ const IndexPage = () => {
     setLoading(true);
     const wallet = walletRef.current.value;
     if (!wallet) return;
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    urlParams.set('wallet', wallet);
     handleApiResp(wallet);
     return false;
   }
@@ -85,10 +84,6 @@ const IndexPage = () => {
   };
 
   const filtered = filteredCollections.length > 0 ? filteredCollections : collections;
-
-  const queryString = window?.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const wallet = urlParams.get('wallet');
 
   return (
     <main>  
@@ -126,7 +121,7 @@ const IndexPage = () => {
           <Box mb="2em"> 
             <form onSubmit={onSubmit} method="POST">
               <Flex alignItems="center">
-                <Input required mr="1em" name="wallet" ref={walletRef} placeholder={wallet || "Enter wallet address"} />
+                <Input required mr="1em" name="wallet" ref={walletRef} placeholder={queryParam || "Enter wallet address"} />
                 {loading ? <Spinner color="blue.500" /> : 
                 <Button 
                   colorScheme="blue"
