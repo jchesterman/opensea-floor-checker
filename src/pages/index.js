@@ -1,7 +1,7 @@
 import * as React from "react"
 import {Box, Input, Image, Spinner, Button, Flex, Text, Container} from '@chakra-ui/react';
 import CollectionList from '../components/CollectionList';
-import {InfoOutlineIcon} from '@chakra-ui/icons';
+import numeral from 'numeral';
 
 const IndexPage = () => {
   const walletRef = React.useRef(null);
@@ -141,10 +141,10 @@ const IndexPage = () => {
             top="150px"
             borderRadius={8}> 
             <Text mb="20px" fontSize="26px">This wallet currently holds{' '}
-              <Box display="inline" fontSize="30px" fontWeight="600">{totalHolding}</Box> nfts,{' '}
+              <Box display="inline" fontSize="30px" fontWeight="600">{numeral(totalHolding).format(0,0)}</Box> nfts,{' '}
             worth{' '}
-            <Box display="inline" fontSize="30px" fontWeight="600">{Math.round(walletTotalValue)}</Box> ETH, or{' '}
-            <Box display="inline" fontSize="30px" fontWeight="600">${Math.round(walletTotalValue * ethPrice)}</Box>{' '}
+            <Box display="inline" fontSize="30px" fontWeight="600">{numeral(Math.round(walletTotalValue)).format(0,0)}</Box> ETH, or{' '}
+            <Box display="inline" fontSize="30px" fontWeight="600">${numeral(Math.round(walletTotalValue * ethPrice)).format(0,0)}</Box>{' '}
               {currency.toUpperCase()}{' '}
               if sold at their current floor prices</Text>
           {numRugged !== 0 && <Box>There are {numRugged} potentially rugged collections (floor price of 0)</Box>}

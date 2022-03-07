@@ -1,5 +1,6 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import * as React from 'react';
+import numeral from 'numeral';
 
 const CollectionRow = ({currency, price, collection}) => {  
 
@@ -27,8 +28,8 @@ const CollectionRow = ({currency, price, collection}) => {
             <Text color="black" fontWeight={800}
               fontSize="16px"
               mb="4px">{collection.name}</Text>
-            <Text>Currently holding: {collection.owned}</Text>
-            <Text>Floor value in {currency.toUpperCase()}: ${Math.round(value)}</Text>
+            <Text>Currently holding: {numeral(collection.owned).format(0,0)}</Text>
+            <Text>Floor value in {currency.toUpperCase()}: ${numeral(Math.round(value)).format(0,0)}</Text>
           </Box>
         </Flex>
         <Box display="flex" color="rgb(112, 122, 131)"
