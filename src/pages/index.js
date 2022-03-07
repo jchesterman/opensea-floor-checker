@@ -25,14 +25,16 @@ const IndexPage = () => {
       setEthPrice(response[0].current_price);
     }
     getEthToFiat();
+    // handle query params
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const wallet = urlParams.get('wallet');
+    if (wallet) {
+      handleApiResp(wallet);
+    }
   }, []);
 
-  async function onSubmit(e) {
-    setCollections([]);
-    e.preventDefault();
-    setLoading(true);
-    const wallet = walletRef.current.value;
-    if (!wallet) return;
+  async function handleApiResp(wallet) {
     const options = {method: 'GET'}
     const collections = await fetch(`https://api.opensea.io/api/v1/collections?offset=0&limit=300&asset_owner=${wallet}`, options);
     const colResponse = await collections.json();
@@ -58,6 +60,18 @@ const IndexPage = () => {
     setWalletTotalValue(collectionsArr.reduce((sum, current) => sum + current.totalEthValue, 0));
     setTotalHolding(collectionsArr.reduce((sum, current) => sum + current.owned, 0));
     setLoaded(true);
+  } 
+
+  async function onSubmit(e) {
+    setCollections([]);
+    e.preventDefault();
+    setLoading(true);
+    const wallet = walletRef.current.value;
+    if (!wallet) return;
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    urlParams.set('wallet', wallet);
+    handleApiResp(wallet);
     return false;
   }
 
@@ -71,6 +85,10 @@ const IndexPage = () => {
   };
 
   const filtered = filteredCollections.length > 0 ? filteredCollections : collections;
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const wallet = urlParams.get('wallet');
 
   return (
     <main>  
@@ -105,10 +123,10 @@ const IndexPage = () => {
                     top: 0
                   }}>({currency.toUpperCase()})</sup></Text>}
           </Flex>
-          <Box mb="2em">
+          <Box mb="2em"> 
             <form onSubmit={onSubmit} method="POST">
               <Flex alignItems="center">
-                <Input required mr="1em" name="wallet" ref={walletRef} placeholder="Enter wallet address" />
+                <Input required mr="1em" name="wallet" ref={walletRef} placeholder={wallet || "Enter wallet address"} />
                 {loading ? <Spinner color="blue.500" /> : 
                 <Button 
                   colorScheme="blue"
