@@ -1,6 +1,7 @@
 import * as React from "react"
-import {Box, Input, Spinner, Button, Flex, Text} from '@chakra-ui/react';
+import {Box, Input, Image, Spinner, Button, Flex, Text, Container} from '@chakra-ui/react';
 import CollectionList from '../components/CollectionList';
+import {InfoOutlineIcon} from '@chakra-ui/icons';
 
 const IndexPage = () => {
   const walletRef = React.useRef(null);
@@ -9,7 +10,7 @@ const IndexPage = () => {
   const [numRugged, setNumRugged] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [ethPrice, setEthPrice] = React.useState(null);
-  const [currency, setCurrency] = React.useState('cad');
+  const [currency, setCurrency] = React.useState('usd');
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
@@ -45,7 +46,8 @@ const IndexPage = () => {
           owned: collection.owned_asset_count,
           floorPrice: statsResp.stats.floor_price || '0',
           rugged: !statsResp.stats.floor_price,
-          totalEthValue: collection.owned_asset_count * statsResp.stats.floor_price
+          totalEthValue: collection.owned_asset_count * statsResp.stats.floor_price,
+          ...collection
         }
       })
     );    
@@ -73,30 +75,82 @@ const IndexPage = () => {
   return (
     <main>  
       <title>Home Page</title>
-      <Box p="40px">
-        <Flex mb="20px" justifyContent="flex-end">
-            {ethPrice &&
-              <Text color="green.500">ETH: ${ethPrice}<sup>({currency.toUpperCase()})</sup></Text>}
-        </Flex>
-        <Box mb="2em">
-          <form onSubmit={onSubmit} method="POST">
-            <Flex alignItems="center">
-              <Input required mr="1em" name="wallet" ref={walletRef} placeholder="Enter wallet address" />
-              {loading ? <Spinner /> : 
-              <Button type="submit">Check the floors</Button>}
-            </Flex>
-          </form>
-        </Box>
-        {loaded && <Text mb="20px">This wallet currently holds {totalHolding} nfts, 
-          worth {Math.round(walletTotalValue)} ETH or ${Math.round(walletTotalValue * ethPrice)} {currency.toUpperCase()} if sold at their current floor prices</Text>}
-        {numRugged !== 0 && <Box mb="30px">There are {numRugged} potentially rugged collections (floor price of 0)</Box>}
-        {collections.length > 0 && <Box w="420px" mb="40px">
-            <Input onChange={handleSearchUpdate} placeholder="Search for a collection" />
-          </Box>}
-        <Box>
-          <CollectionList currency={currency} ethPrice={ethPrice} collections={filtered} />
-        </Box>
+      <Box position="fixed" 
+        top="0"
+        width="100%"
+        p="0 40px"
+        boxShadow="rgb(4 17 29 / 25%) 0px 0px 8px 0px"
+        bg="#fff"
+        zIndex={999}>
+        <Container maxW="container.xxl">
+          <Flex mb="20px" 
+            mt="10px"
+            alignItems="center" 
+            justifyContent="space-between">
+              <Text fontSize="18px"><strong>OpenSea</strong> Floor Checker</Text>
+              {ethPrice &&
+                <Text 
+                  alignItems="center"
+                  display="flex"
+                  fontSize="14px"
+                  fontWeight={600}
+                  color="green.400"><Image 
+                  pos="relative"
+                  ml="10px"
+                  mr="4px"
+                  src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" 
+                  w="14px" 
+                  h="14px" /> ${ethPrice}<sup css={{
+                    position: 'relative',
+                    top: 0
+                  }}>({currency.toUpperCase()})</sup></Text>}
+          </Flex>
+          <Box mb="2em">
+            <form onSubmit={onSubmit} method="POST">
+              <Flex alignItems="center">
+                <Input required mr="1em" name="wallet" ref={walletRef} placeholder="Enter wallet address" />
+                {loading ? <Spinner color="blue.500" /> : 
+                <Button 
+                  colorScheme="blue"
+                  p="4px 20px"
+                  type="submit">Check</Button>}
+              </Flex>
+            </form>
+          </Box>
+        </Container>
       </Box>
+      <Container maxW="container.xxl">
+        <Flex p="40px" mt="120px" 
+          justifyContent="space-between" alignItems="flex-start">
+          {collections.length > 0 && loaded && 
+          <Box w="48%">
+            <Box w="100%" mb="20px">
+              <Input onChange={handleSearchUpdate} placeholder="Search for a collection" />
+            </Box>
+            <Box>
+              <CollectionList currency={currency} ethPrice={ethPrice} collections={filtered} />
+            </Box>
+          </Box>}
+          {collections.length > 0 && loaded && <Box w="48%" border="1px solid"
+            borderColor="blue.600"
+            background="blue.500"
+            p="20px"
+            mb="30px"
+            color="white"
+            position="sticky"
+            top="150px"
+            borderRadius={8}> 
+            <Text mb="20px" fontSize="26px">This wallet currently holds{' '}
+              <Box display="inline" fontSize="30px" fontWeight="600">{totalHolding}</Box> nfts,{' '}
+            worth{' '}
+            <Box display="inline" fontSize="30px" fontWeight="600">{Math.round(walletTotalValue)}</Box> ETH, or{' '}
+            <Box display="inline" fontSize="30px" fontWeight="600">${Math.round(walletTotalValue * ethPrice)}</Box>{' '}
+              {currency.toUpperCase()}{' '}
+              if sold at their current floor prices</Text>
+          {numRugged !== 0 && <Box>There are {numRugged} potentially rugged collections (floor price of 0)</Box>}
+          </Box>}
+        </Flex>
+      </Container>
     </main>
   )
 }

@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import * as React from 'react';
 
 const CollectionRow = ({currency, price, collection}) => {  
@@ -6,22 +6,41 @@ const CollectionRow = ({currency, price, collection}) => {
   let value = price * collection.totalEthValue;
   if (collection.rugged) value = '0';
 
+  console.log(collection);
+
   return (
-    <Box mb="1em" bg={collection.rugged ? "red.100" : "green.100"} 
-      p="10px" 
-      borderRadius="10px">
+    <Box
+      p="1em 0" 
+      borderBottom="1px solid rgb(229, 232, 235)">
       <Flex justifyContent="space-between">
-        <Box>
-          <Text color="black" fontWeight={600}>{collection.name}</Text>
-        </Box>
-        <Box>
-          Current Floor: {collection.floorPrice}
-        </Box>
-      </Flex>
-      <Flex justifyContent="space-between">
-        <Box>
-          <Text color="black">Currently holding: {collection.owned}</Text>
-          <Text color="black">Current floor value in {currency}: {Math.round(value)}</Text>
+        <Flex alignItems="center">
+          {collection.image_url && 
+            <Box mr="20px">
+              <Image borderRadius="60px" 
+              w="60px"
+              height="60px"
+              src={collection.image_url} />
+            </Box>} 
+          <Box color="rgb(112, 122, 131)"
+            fontSize="14px"
+            fontWeight={700}>
+            <Text color="black" fontWeight={800}
+              fontSize="16px"
+              mb="4px">{collection.name}</Text>
+            <Text>Currently holding: {collection.owned}</Text>
+            <Text>Floor value in {currency.toUpperCase()}: ${Math.round(value)}</Text>
+          </Box>
+        </Flex>
+        <Box display="flex" color="rgb(112, 122, 131)"
+          fontWeight="500"
+          fontSize="14px">
+          Floor price: <Image 
+          pos="relative"
+          top="3px"
+          ml="10px"
+          src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" 
+          w="14px" 
+          h="14px" />{collection.floorPrice}
         </Box>
       </Flex>
     </Box>
