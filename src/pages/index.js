@@ -57,6 +57,7 @@ const IndexPage = () => {
       'taking this years profits to pay last years capital gains.',
       'these “NFTS” - are they in the room with us now?',
       'buy high sell low.',
+      'dyor.'
     ];
 
     setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
