@@ -146,7 +146,7 @@ const IndexPage = () => {
         boxShadow="rgb(4 17 29 / 25%) 0px 0px 8px 0px"
         bg="#fff"
         zIndex={999}>
-        <Container maxW="container.xxl">
+        <Container maxW="container.xl">
           <Flex mb="20px" 
             mt="10px"
             alignItems="center" 
@@ -183,17 +183,17 @@ const IndexPage = () => {
                 <Button 
                   colorScheme="blue"
                   p="4px 20px"
-                  type="submit">Check</Button>}
+                  type="submit">Check</Button>} 
               </Flex>
             </form>
           </Box>
         </Container>
       </Box>
-      <Container maxW="container.xxl">
+      <Container maxW="container.xl">
         {apiError ? <Box mt="17vh"  p={{base: "0", md: "0 40px"}}>
             <Text fontSize="90px" fontWeight={800} color="red.500">OpenSea API call was rugged or wallet address wasn't found. Try again shortly...</Text>
           </Box> : 
-        <Flex  p={{base: "0", md: "40px"}} mt="17vh"
+        <Flex  pt={{base: "0", md: "40px"}} mt="17vh"
           flexDir={{base: "column-reverse", md: "row"}}
           justifyContent="space-between" alignItems="flex-start">
           {collections.length > 0 && loaded && 
@@ -232,7 +232,7 @@ const IndexPage = () => {
           <Text mt="18px" fontStyle="italic" color="#fff" fontWeight={600}>If this was useful, you can send me a tip 
             <Icon as={FaPrayingHands} 
               pos="relative"
-              ml="6px"
+              ml="6 px"
               top="2px"
               color="white" /></Text>
           <Flex
@@ -255,7 +255,7 @@ const IndexPage = () => {
           </Flex>
           </Box>}
         </Flex>}
-        <Flex mt="40px" mb="40px" p={{base: "0", md: "40px"}}>
+        <Flex mt="40px" mb="40px">
           <Text fontWeight="600">
             Made with <Icon pos="relative" top="3px" as={FaHeart} color="red.500" /> by{' '}
             <Link
