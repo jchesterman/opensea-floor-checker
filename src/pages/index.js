@@ -1,7 +1,17 @@
 import * as React from "react"
-import {Box, Input, Image, Spinner, Button, Flex, Text, Container} from '@chakra-ui/react';
+import {Box,
+  Link, 
+  Input, 
+  Image, 
+  Spinner, 
+  Button, 
+  Flex, 
+  Text, 
+  Container, 
+  Icon} from '@chakra-ui/react';
 import CollectionList from '../components/CollectionList';
 import numeral from 'numeral';
+import {FaHeart} from 'react-icons/fa';
 
 const IndexPage = () => {
   const walletRef = React.useRef(null);
@@ -15,8 +25,21 @@ const IndexPage = () => {
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
   const [queryParam, setQueryParam] = React.useState(null);
+  const [apiError, setApiError] = React.useState(false);
+  const [quote, setQuote] = React.useState(null);
+
+  const quotes = [
+    'You only lose money if you sell.',
+    'Looks rare.',
+    'Wen whitelist?',
+    'Wen mint?',
+    'We\'re all gonna make it.',
+    'Grand rising!',
+    'Degen hours.',
+  ];
 
   React.useEffect(() => {
+    setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
     async function getEthToFiat() {
       //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
       let response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&ids=ethereum`, {
@@ -38,38 +61,44 @@ const IndexPage = () => {
 
   async function handleApiResp(wallet) {
     const options = {method: 'GET'}
-    const collections = await fetch(`https://api.opensea.io/api/v1/collections?offset=0&limit=300&asset_owner=${wallet}`, options);
-    const colResponse = await collections.json();
-
-    const collectionsArr = await Promise.all(
-      colResponse.map(async collection => {
-        const stats = await fetch(`https://api.opensea.io/api/v1/collection/${collection.slug}/stats`, options);
-        const statsResp = await stats.json();
-        return {
-          name: collection.name,
-          owned: collection.owned_asset_count,
-          floorPrice: statsResp.stats.floor_price || '0',
-          rugged: !statsResp.stats.floor_price,
-          totalEthValue: collection.owned_asset_count * statsResp.stats.floor_price,
-          ...collection
-        }
-      })
-    );    
-    setLoading(false);
-    collectionsArr.sort((a, b) => b.floorPrice - a.floorPrice);
-    setNumRugged(collectionsArr.filter(collection => collection.rugged).length);
-    setCollections(collectionsArr);
-    setWalletTotalValue(collectionsArr.reduce((sum, current) => sum + current.totalEthValue, 0));
-    setTotalHolding(collectionsArr.reduce((sum, current) => sum + current.owned, 0));
-    setLoaded(true);
+    try {
+      const collections = await fetch(`https://api.opensea.io/api/v1/collections?offset=0&limit=300&asset_owner=${wallet}`, options);
+      const colResponse = await collections.json();
+      const collectionsArr = await Promise.all(
+        colResponse.map(async collection => {
+          const stats = await fetch(`https://api.opensea.io/api/v1/collection/${collection.slug}/stats`, options);
+          const statsResp = await stats.json();
+          return {
+            name: collection.name,
+            owned: collection.owned_asset_count,
+            floorPrice: statsResp.stats.floor_price || '0',
+            rugged: !statsResp.stats.floor_price,
+            totalEthValue: collection.owned_asset_count * statsResp.stats.floor_price,
+            ...collection
+          }
+        })
+      );
+      setLoading(false);
+      collectionsArr.sort((a, b) => b.floorPrice - a.floorPrice);
+      setNumRugged(collectionsArr.filter(collection => collection.rugged).length);
+      setCollections(collectionsArr);
+      setWalletTotalValue(collectionsArr.reduce((sum, current) => sum + current.totalEthValue, 0));
+      setTotalHolding(collectionsArr.reduce((sum, current) => sum + current.owned, 0));
+      setLoaded(true);
+      setApiError(false);
+    } catch(error) {
+      setApiError(true);
+      setLoading(false);
+    }
   } 
 
   async function onSubmit(e) {
-    setCollections([]);
     e.preventDefault();
+    setCollections([]);
     setLoading(true);
     const wallet = walletRef.current.value;
     if (!wallet) return;
+    window.history.replaceState({}, '',`/?wallet=${wallet}`);
     handleApiResp(wallet);
     return false;
   }
@@ -92,6 +121,7 @@ const IndexPage = () => {
         top="0"
         width="100%"
         p="0 40px"
+        h="14vh"
         boxShadow="rgb(4 17 29 / 25%) 0px 0px 8px 0px"
         bg="#fff"
         zIndex={999}>
@@ -100,7 +130,13 @@ const IndexPage = () => {
             mt="10px"
             alignItems="center" 
             justifyContent="space-between">
-              <Text fontSize="18px"><strong>OpenSea</strong> Floor Checker</Text>
+              <Text fontSize="18px">
+                <Link _hover={{
+                  textDecoration: 'none'
+                }} href="/">
+                  <strong>OpenSea</strong> Floor Checker
+                </Link>
+              </Text>
               {ethPrice &&
                 <Text 
                   alignItems="center"
@@ -133,6 +169,9 @@ const IndexPage = () => {
         </Container>
       </Box>
       <Container maxW="container.xxl">
+        {apiError ? <Box mt="120px" p="40px">
+            <Text>OpenSea API call was rugged (throttled), or wallet address wasn't found. Try again shortly...</Text>
+          </Box> : 
         <Flex p="40px" mt="120px" 
           justifyContent="space-between" alignItems="flex-start">
           {collections.length > 0 && loaded && 
@@ -144,6 +183,11 @@ const IndexPage = () => {
               <CollectionList currency={currency} ethPrice={ethPrice} collections={filtered} />
             </Box>
           </Box>}
+          {collections.length === 0 && <Flex minHeight="65vh"
+            alignItems="center">
+            <Text fontSize="130px" 
+              color="blue.500" 
+              fontWeight={800}>{quote}</Text></Flex>}
           {collections.length > 0 && loaded && <Box w="48%" border="1px solid"
             borderColor="blue.600"
             background="blue.500"
@@ -154,14 +198,23 @@ const IndexPage = () => {
             top="150px"
             borderRadius={8}> 
             <Text mb="20px" fontSize="26px">This wallet currently holds{' '}
-              <Box display="inline" fontSize="30px" fontWeight="600">{numeral(totalHolding).format(0,0)}</Box> nfts,{' '}
+              <Text as="span" display="inline" fontSize="30px" fontWeight="600">{numeral(totalHolding).format(0,0)}</Text> nfts,{' '}
             worth{' '}
-            <Box display="inline" fontSize="30px" fontWeight="600">{numeral(Math.round(walletTotalValue)).format(0,0)}</Box> ETH, or{' '}
-            <Box display="inline" fontSize="30px" fontWeight="600">${numeral(Math.round(walletTotalValue * ethPrice)).format(0,0)}</Box>{' '}
+            <Text as="span" display="inline" fontSize="30px" fontWeight="600">{numeral(Math.round(walletTotalValue)).format(0,0)}</Text> ETH, or{' '}
+            <Text as="span" display="inline" fontSize="30px" fontWeight="600">${numeral(Math.round(walletTotalValue * ethPrice)).format(0,0)}</Text>{' '}
               {currency.toUpperCase()}{' '}
               if sold at their current floor prices</Text>
           {numRugged !== 0 && <Box>There are {numRugged} potentially rugged collections (floor price of 0)</Box>}
           </Box>}
+        </Flex>}
+        <Flex p="40px">
+          <Text fontWeight="600">
+            Made with <Icon pos="relative" top="3px" as={FaHeart} color="red.500" /> by{' '}
+            <Link
+              target="_blank"
+              rel="noopener noreferrer" 
+              href="https://twitter.com/thedogemaxi">@thedogemaxi</Link>
+          </Text>
         </Flex>
       </Container>
     </main>
