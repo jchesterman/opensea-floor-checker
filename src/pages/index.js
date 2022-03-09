@@ -36,8 +36,19 @@ const IndexPage = () => {
       'Wen whitelist?',
       'Wen mint?',
       'We\'re all gonna make it.',
-      'Grand rising!',
+      'Grand rising.',
       'Degen hours.',
+      'Btc I trust, hodl I must.',
+      '"It\'s digital gold, bro."',
+      'Dogecoin to the moon.',
+      'Right click save as.',
+      'I\'ve been trying to reach you about your nfts extended warranty.',
+      'You got to pump it up.',
+      'Don\'t you know, pump it up.',
+      '"I\'m in it for the community."',
+      'Wen reveal?',
+      'But what\'s the utility.',
+      'Bullish AF bro.'
     ];
 
     setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
