@@ -48,7 +48,8 @@ const IndexPage = () => {
       'I\'m in it for the community.',
       'Wen reveal?',
       'But what\'s the utility.',
-      'Bullish AF bro.'
+      'Bullish AF bro.',
+      'Taking this years profits to pay last years capital gains.'
     ];
 
     setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
@@ -217,6 +218,7 @@ const IndexPage = () => {
               {currency.toUpperCase()}{' '}
               if sold at their current floor prices</Text>
           {numRugged !== 0 && <Box>There are {numRugged} potentially rugged collections (floor price of 0)</Box>}
+          <Text color="#fff" fontWeight={600}>Was this useful? Leave me a tip :)</Text>
           </Box>}
         </Flex>}
         <Flex p="40px">
