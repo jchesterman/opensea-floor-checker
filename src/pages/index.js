@@ -227,7 +227,8 @@ const IndexPage = () => {
           <Text mt="18px" fontStyle="italic" color="#fff" fontWeight={600}>Was this useful? Leave me a tip :)</Text>
           <Flex
             mt="10px" color="#fff"
-            alignItems="center">
+            alignItems={{base: "flex-start", md: "center"}}
+            flexDir={{base: "column", md: "row"}}>
           <CopyToClipboard onCopy={() => setCopied(true)} text={tipWallet}>
             <Text ref={textAreaRef}
               cursor="pointer"
@@ -237,7 +238,10 @@ const IndexPage = () => {
               {tipWallet}  
             </Text>
           </CopyToClipboard>
-          {copied && <Text ml="12px" fontSize="12px" fontWeight={600}>copied!</Text>}
+          {copied && <Text 
+            ml={{base: "0", md: "12px"}} 
+            mt={{base: "10px", md: "0"}}
+            fontSize="12px" fontWeight={600}>copied!</Text>}
           </Flex>
           </Box>}
         </Flex>}
