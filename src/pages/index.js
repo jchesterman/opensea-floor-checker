@@ -207,7 +207,9 @@ const IndexPage = () => {
           </Box>}
           {collections.length === 0 && <Flex minHeight="60vh"
             alignItems="center">
-            <Text fontSize={{base: "90px", md: "130px"}} 
+            <Text 
+              textShadow="2px 2px #bee3f8"
+              fontSize={{base: "90px", md: "130px"}} 
               color="blue.500" 
               fontWeight={800}>{quote}</Text></Flex>}
           {collections.length > 0 && loaded && <Box w={{base: "100%", md: "48%"}} border="1px solid"
