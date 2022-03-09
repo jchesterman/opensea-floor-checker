@@ -242,7 +242,7 @@ const IndexPage = () => {
           <CopyToClipboard onCopy={() => setCopied(true)} text={tipWallet}>
             <Text ref={textAreaRef}
               cursor="pointer"
-              bgColor="whiteAlpha.400" 
+              bgColor={copied ? "whiteAlpha.200" : "whiteAlpha.400"} 
               p="6px" borderRadius="6px" 
               display="inline-block" fontSize="12px">
               {tipWallet}  
