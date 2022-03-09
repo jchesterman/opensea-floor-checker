@@ -20,7 +20,7 @@ const IndexPage = () => {
   const [numRugged, setNumRugged] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [ethPrice, setEthPrice] = React.useState(null);
-  const [currency, setCurrency] = React.useState('usd');
+  const [currency] = React.useState('usd');
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
@@ -28,17 +28,18 @@ const IndexPage = () => {
   const [apiError, setApiError] = React.useState(false);
   const [quote, setQuote] = React.useState(null);
 
-  const quotes = [
-    'You only lose money if you sell.',
-    'Looks rare.',
-    'Wen whitelist?',
-    'Wen mint?',
-    'We\'re all gonna make it.',
-    'Grand rising!',
-    'Degen hours.',
-  ];
-
   React.useEffect(() => {
+
+    const quotes = [
+      'You only lose money if you sell.',
+      'Looks rare.',
+      'Wen whitelist?',
+      'Wen mint?',
+      'We\'re all gonna make it.',
+      'Grand rising!',
+      'Degen hours.',
+    ];
+
     setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
     async function getEthToFiat() {
       //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
@@ -57,7 +58,7 @@ const IndexPage = () => {
     if (wallet) {
       handleApiResp(wallet);
     }
-  }, []);
+  }, [currency]);
 
   async function handleApiResp(wallet) {
     const options = {method: 'GET'}
