@@ -55,7 +55,8 @@ const IndexPage = () => {
       'but what\'s the utility.',
       'bullish AF bro.',
       'taking this years profits to pay last years capital gains.',
-      'these “NFTS” - are they in the room with us now?'
+      'these “NFTS” - are they in the room with us now?',
+      'buy high sell low.',
     ];
 
     setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
