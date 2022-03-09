@@ -112,6 +112,7 @@ const IndexPage = () => {
 
   async function onSubmit(e) {
     e.preventDefault();
+    setCopied(false);
     setCollections([]);
     setLoading(true);
     const wallet = walletRef.current.value;
