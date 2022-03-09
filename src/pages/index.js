@@ -12,6 +12,7 @@ import {Box,
 import CollectionList from '../components/CollectionList';
 import numeral from 'numeral';
 import {FaHeart} from 'react-icons/fa';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 const IndexPage = () => {
   const walletRef = React.useRef(null);
@@ -27,6 +28,10 @@ const IndexPage = () => {
   const [queryParam, setQueryParam] = React.useState(null);
   const [apiError, setApiError] = React.useState(false);
   const [quote, setQuote] = React.useState(null);
+  const [tipWallet] = React.useState('0x70642BE40a82bC0340439Ed5f98C4F6B48d13c7A ');
+
+  const [copied, setCopied] = React.useState(false);
+  const textAreaRef = React.useRef(null);
 
   React.useEffect(() => {
 
@@ -129,11 +134,11 @@ const IndexPage = () => {
 
   return (
     <main>  
-      <title>Home Page</title>
+      <title>OpenSea Floor Checker / See your NFT collection's ETH/USD value at a glance.</title>
       <Box position="fixed" 
         top="0"
         width="100%"
-        p="0 40px"
+        p={{base: "0", md: "0 40px"}}
         h="14vh"
         boxShadow="rgb(4 17 29 / 25%) 0px 0px 8px 0px"
         bg="#fff"
@@ -182,13 +187,14 @@ const IndexPage = () => {
         </Container>
       </Box>
       <Container maxW="container.xxl">
-        {apiError ? <Box mt="120px" p="40px">
+        {apiError ? <Box mt="120px"  p={{base: "0", md: "0 40px"}}>
             <Text fontSize="90px" fontWeight={800} color="red.500">OpenSea API call was rugged or wallet address wasn't found. Try again shortly...</Text>
           </Box> : 
-        <Flex p="40px" mt="120px" 
+        <Flex  p={{base: "0", md: "40px"}} mt="17vh"
+          flexDir={{base: "column-reverse", md: "row"}}
           justifyContent="space-between" alignItems="flex-start">
           {collections.length > 0 && loaded && 
-          <Box w="48%">
+          <Box w={{base: "100%", md: "48%"}}>
             <Box w="100%" mb="20px">
               <Input onChange={handleSearchUpdate} placeholder="Search for a collection" />
             </Box>
@@ -196,19 +202,19 @@ const IndexPage = () => {
               <CollectionList currency={currency} ethPrice={ethPrice} collections={filtered} />
             </Box>
           </Box>}
-          {collections.length === 0 && <Flex minHeight="65vh"
+          {collections.length === 0 && <Flex minHeight="60vh"
             alignItems="center">
-            <Text fontSize="130px" 
+            <Text fontSize={{base: "90px", md: "130px"}} 
               color="blue.500" 
               fontWeight={800}>{quote}</Text></Flex>}
-          {collections.length > 0 && loaded && <Box w="48%" border="1px solid"
+          {collections.length > 0 && loaded && <Box w={{base: "100%", md: "48%"}} border="1px solid"
             borderColor="blue.600"
             background="blue.500"
             p="20px"
             mb="30px"
             color="white"
-            position="sticky"
-            top="150px"
+            position={{base: "relative", md: "sticky"}}
+            top={{base: "0", md: "150px"}}
             borderRadius={8}> 
             <Text mb="20px" fontSize="26px">This wallet currently holds{' '}
               <Text as="span" display="inline" fontSize="30px" fontWeight="600">{numeral(totalHolding).format(0,0)}</Text> nfts,{' '}
@@ -218,10 +224,24 @@ const IndexPage = () => {
               {currency.toUpperCase()}{' '}
               if sold at their current floor prices</Text>
           {numRugged !== 0 && <Box>There are {numRugged} potentially rugged collections (floor price of 0)</Box>}
-          <Text color="#fff" fontWeight={600}>Was this useful? Leave me a tip :)</Text>
+          <Text mt="18px" fontStyle="italic" color="#fff" fontWeight={600}>Was this useful? Leave me a tip :)</Text>
+          <Flex
+            mt="10px" color="#fff"
+            alignItems="center">
+          <CopyToClipboard onCopy={() => setCopied(true)} text={tipWallet}>
+            <Text ref={textAreaRef}
+              cursor="pointer"
+              bgColor="whiteAlpha.400" 
+              p="6px" borderRadius="6px" 
+              display="inline-block" fontSize="12px">
+              {tipWallet}  
+            </Text>
+          </CopyToClipboard>
+          {copied && <Text ml="12px" fontSize="12px" fontWeight={600}>copied!</Text>}
+          </Flex>
           </Box>}
         </Flex>}
-        <Flex p="40px">
+        <Flex mt="40px" mb="40px" p={{base: "0", md: "40px"}}>
           <Text fontWeight="600">
             Made with <Icon pos="relative" top="3px" as={FaHeart} color="red.500" /> by{' '}
             <Link

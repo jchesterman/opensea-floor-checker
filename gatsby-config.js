@@ -1,7 +1,8 @@
 module.exports = {
   siteMetadata: {
-      title: `NFT Floor Price Checker`,
-    siteUrl: `https://www.yourdomain.tld`
+      title: `Opensea Floor Price Checker`,
+      description: `See your NFT collection's eth/usd value at a glance.`,
+      siteUrl: `https://openseafloorchecker.com`
   },
   plugins: ["gatsby-plugin-emotion", 
     {
@@ -17,6 +18,12 @@ module.exports = {
          * if false, this plugin will not use <ColorModeProvider />
          */
         isUsingColorMode: true,
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        icon: 'src/images/favicon.png',
       },
     },
     {

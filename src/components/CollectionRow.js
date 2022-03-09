@@ -7,13 +7,11 @@ const CollectionRow = ({currency, price, collection}) => {
   let value = price * collection.totalEthValue;
   if (collection.rugged) value = '0';
 
-  console.log(collection);
-
   return (
     <Box
       p="1em 0" 
       borderBottom="1px solid rgb(229, 232, 235)">
-      <Flex justifyContent="space-between">
+      <Flex justifyContent="space-between" flexDir={{base: "column-reverse", md: "row"}}>
         <Flex alignItems="center">
           {collection.image_url && 
             <Box mr="20px">
@@ -28,11 +26,21 @@ const CollectionRow = ({currency, price, collection}) => {
             <Text color="black" fontWeight={800}
               fontSize="16px"
               mb="4px">{collection.name}</Text>
+            <Text display={{base: "block", md: "none"}} color="rgb(112, 122, 131)"
+              fontWeight="600"
+              fontSize="14px">
+              Floor price: <Image display="inline" 
+              top="2px"
+              pos="relative"
+              src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" 
+              w="14px" 
+              h="14px" />{collection.floorPrice}
+            </Text>
             <Text>Currently holding: {numeral(collection.owned).format(0,0)}</Text>
             <Text>Floor value in {currency.toUpperCase()}: ${numeral(Math.round(value)).format(0,0)}</Text>
           </Box>
         </Flex>
-        <Box display="flex" color="rgb(112, 122, 131)"
+        <Box display={{base: "none", md: "flex"}} color="rgb(112, 122, 131)"
           fontWeight="500"
           fontSize="14px">
           Floor price: <Image 

@@ -25,8 +25,10 @@
     "gatsby": "^4.7.2",
     "gatsby-plugin-emotion": "^7.7.0",
     "gatsby-plugin-google-gtag": "^4.9.0",
+    "gatsby-plugin-manifest": "^4.9.1",
     "numeral": "^2.0.6",
     "react": "^17.0.1",
+    "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "^17.0.1",
     "react-icons": "^4.3.1"
   }
