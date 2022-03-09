@@ -232,7 +232,7 @@ const IndexPage = () => {
           <Text mt="18px" fontStyle="italic" color="#fff" fontWeight={600}>If this was useful, you can send me a tip 
             <Icon as={FaPrayingHands} 
               pos="relative"
-              ml="6 px"
+              ml="6px"
               top="2px"
               color="white" /></Text>
           <Flex
