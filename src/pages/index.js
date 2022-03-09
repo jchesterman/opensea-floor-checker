@@ -11,7 +11,7 @@ import {Box,
   Icon} from '@chakra-ui/react';
 import CollectionList from '../components/CollectionList';
 import numeral from 'numeral';
-import {FaHeart} from 'react-icons/fa';
+import {FaHeart, FaPrayingHands} from 'react-icons/fa';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 const IndexPage = () => {
@@ -227,9 +227,14 @@ const IndexPage = () => {
             <Text as="span" display="inline" fontSize="30px" fontWeight="600">{numeral(Math.round(walletTotalValue)).format(0,0)}</Text> ETH, or{' '}
             <Text as="span" display="inline" fontSize="30px" fontWeight="600">${numeral(Math.round(walletTotalValue * ethPrice)).format(0,0)}</Text>{' '}
               {currency.toUpperCase()}{' '}
-              if sold at their current floor prices</Text>
+              if sold at their current floor prices.</Text>
           {numRugged !== 0 && <Box>There are {numRugged} potentially rugged collections (floor price of 0)</Box>}
-          <Text mt="18px" fontStyle="italic" color="#fff" fontWeight={600}>Was this useful? Leave me a tip :)</Text>
+          <Text mt="18px" fontStyle="italic" color="#fff" fontWeight={600}>If this was useful, you can send me a tip 
+            <Icon as={FaPrayingHands} 
+              pos="relative"
+              ml="6px"
+              top="2px"
+              color="white" /></Text>
           <Flex
             mt="10px" color="#fff"
             alignItems={{base: "flex-start", md: "center"}}
