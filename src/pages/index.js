@@ -144,7 +144,7 @@ const IndexPage = () => {
         top="0"
         width="100%"
         p={{base: "0", md: "0 40px"}}
-        h="14vh"
+        h={{base: "18vh", md: "14vh"}}
         boxShadow="rgb(4 17 29 / 25%) 0px 0px 8px 0px"
         bg="#fff"
         zIndex={999}>
@@ -157,7 +157,7 @@ const IndexPage = () => {
                 <Link _hover={{
                   textDecoration: 'none'
                 }} href="/">
-                  <strong>OpenSea</strong> Floor Checker
+                  <strong>OpenSea</strong><Box as="br" display={{base: 'block', md: 'none'}}/>Floor Checker
                 </Link>
               </Text>
               <Flex>
