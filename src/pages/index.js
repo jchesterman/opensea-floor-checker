@@ -21,7 +21,7 @@ const IndexPage = () => {
   const [numRugged, setNumRugged] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [ethPrice, setEthPrice] = React.useState(null);
-  const [currency] = React.useState('usd');
+  const [currency, setCurrency] = React.useState('usd');
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
@@ -159,22 +159,31 @@ const IndexPage = () => {
                   <strong>OpenSea</strong> Floor Checker
                 </Link>
               </Text>
-              {ethPrice &&
-                <Text 
-                  alignItems="center"
-                  display="flex"
-                  fontSize="14px"
-                  fontWeight={600}
-                  color="green.400"><Image 
-                  pos="relative"
-                  ml="10px"
-                  mr="4px"
-                  src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" 
-                  w="14px" 
-                  h="14px" /> ${ethPrice}<sup css={{
-                    position: 'relative',
-                    top: 0
-                  }}>({currency.toUpperCase()})</sup></Text>}
+              <Flex>
+                {ethPrice &&
+                  <Text 
+                    alignItems="center"
+                    display="flex"
+                    fontSize="14px"
+                    fontWeight={600}
+                    color="green.400"><Image 
+                    pos="relative"
+                    ml="10px"
+                    mr="4px"
+                    src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" 
+                    w="14px" 
+                    h="14px" /> ${numeral(ethPrice).format('0,0.00')}<sup css={{
+                      position: 'relative',
+                      top: 0, 
+                      marginLeft: 4, 
+                    }}>({currency.toUpperCase()})</sup></Text>}
+                <Box onClick={() => setCurrency('usd')} cursor="pointer" _hover={{
+                  opacity: 1
+                }} ml="12px" opacity={currency === 'usd' ? 1 : 0.2}>🇺🇸</Box>
+                <Box onClick={() => setCurrency('cad')} cursor="pointer" _hover={{
+                  opacity: 1
+                }} ml="6px" opacity={currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
+              </Flex>
           </Flex>
           <Box mb="2em"> 
             <form onSubmit={onSubmit} method="POST">
