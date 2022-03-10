@@ -200,7 +200,7 @@ const IndexPage = () => {
         </Container>
       </Box>
       <Container maxW="container.xl">
-        {apiError ? <Box mt="17vh"  p={{base: "0", md: "0 40px"}}>
+        {apiError ? <Box mt="17vh">
             <Text fontSize="90px" fontWeight={800} color="red.500">OpenSea API call was rugged or wallet address wasn't found. Try again shortly...</Text>
           </Box> : 
         <Flex  p={{base: "0", md: "40px 0"}} mt="17vh"
