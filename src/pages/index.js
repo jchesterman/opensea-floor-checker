@@ -204,7 +204,7 @@ const IndexPage = () => {
         {apiError ? <Box mt="17vh">
             <Text fontSize="90px" fontWeight={800} color="red.500">OpenSea API call was rugged or wallet address wasn't found. Try again shortly...</Text>
           </Box> : 
-        <Flex  p={{base: "0", md: "40px 0"}} mt="17vh"
+        <Flex  p={{base: "0", md: "40px 0"}} mt={{base: "19vh", md: "17vh"}}
           flexDir={{base: "column-reverse", md: "row"}}
           justifyContent="space-between" alignItems="flex-start">
           {collections.length > 0 && loaded && 
