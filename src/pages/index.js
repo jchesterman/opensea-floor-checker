@@ -143,7 +143,6 @@ const IndexPage = () => {
       <Box position="fixed" 
         top="0"
         width="100%"
-        p={{base: "0", md: "0 40px"}}
         h={{base: "18vh", md: "14vh"}}
         boxShadow="rgb(4 17 29 / 25%) 0px 0px 8px 0px"
         bg="#fff"
