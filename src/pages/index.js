@@ -22,7 +22,7 @@ const IndexPage = () => {
   const [numRugged, setNumRugged] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [ethPrice, setEthPrice] = React.useState(null);
-  const [currency, setCurrency] = useLocalStorage('currency', 'usd');
+  const [currency, setCurrency] = useLocalStorage('currency', currency ? currency : 'usd');
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
