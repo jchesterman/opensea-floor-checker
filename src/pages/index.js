@@ -71,6 +71,9 @@ const IndexPage = () => {
       setEthPrice(response[0].current_price);
     }
     getEthToFiat();
+  }, [currency]);
+
+  React.useEffect(() => {
     // handle query params
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -79,9 +82,10 @@ const IndexPage = () => {
     if (wallet) {
       handleApiResp(wallet);
     }
-  }, [currency]);
+  }, []);
 
   async function handleApiResp(wallet) {
+    console.log('handled api response!');
     const options = {method: 'GET'}
     try {
       const collections = await fetch(`https://api.opensea.io/api/v1/collections?offset=0&limit=300&asset_owner=${wallet}`, options);
