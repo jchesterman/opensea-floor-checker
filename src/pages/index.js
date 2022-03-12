@@ -13,7 +13,8 @@ import CollectionList from '../components/CollectionList';
 import numeral from 'numeral';
 import {FaHeart, FaPrayingHands} from 'react-icons/fa';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import useLocalStorage from '../hooks/useLocalStorage'; 
+import { useLocalStorage } from "react-use";
+
 
 const IndexPage = () => {
   const walletRef = React.useRef(null);
@@ -22,7 +23,7 @@ const IndexPage = () => {
   const [numRugged, setNumRugged] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [ethPrice, setEthPrice] = React.useState(null);
-  const [currency, setCurrency] = useLocalStorage('currency', currency ? currency : 'usd');
+  const [currency, setCurrency] = useLocalStorage('currency', 'usd');
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
@@ -131,6 +132,7 @@ const IndexPage = () => {
 
   function handleCurrencyChange(selectedCurrency) {
     async function getEthToFiat() {
+      //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
       let response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${selectedCurrency}&ids=ethereum`, {
         method: 'GET'
       });
