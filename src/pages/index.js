@@ -147,8 +147,6 @@ const IndexPage = () => {
 
   const filtered = filteredCollections.length > 0 ? filteredCollections : collections;
 
-  console.log('currency: ', currency);
-
   return (
     <main>  
       <title>OpenSea Floor Checker / See your NFT collection's ETH/USD value at a glance.</title>
@@ -195,7 +193,6 @@ const IndexPage = () => {
                 <Box onClick={() => handleCurrencyChange('cad')} cursor="pointer" _hover={{
                   opacity: 1
                 }} ml="6px" opacity={mounted && currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
-                <Box>{currency}</Box>
               </Flex>
           </Flex>
           <Box mb="2em"> 
