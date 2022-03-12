@@ -38,7 +38,9 @@ const IndexPage = () => {
 
   React.useEffect(() => {
     setMounted(true);
-    handleCurrencyChange(currency);
+    if (!mounted) {
+      handleCurrencyChange(currency);
+    }
   }, [currency]);
 
   React.useEffect(() => {
