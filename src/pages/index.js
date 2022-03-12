@@ -35,7 +35,10 @@ const IndexPage = () => {
   const textAreaRef = React.useRef(null);
 
   React.useEffect(() => {
+    handleCurrencyChange(currency);
+  }, [currency]);
 
+  React.useEffect(() => {
     const quotes = [
       'you only lose money if you sell.', 
       'looks rare.',
@@ -60,20 +63,8 @@ const IndexPage = () => {
       'buy high sell low.',
       'dyor.'
     ];
-
     setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
-    async function getEthToFiat() {
-      //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
-      let response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&ids=ethereum`, {
-        method: 'GET'
-      });
-      response = await response.json();
-      setEthPrice(response[0].current_price);
-    }
-    getEthToFiat();
-  }, [currency]);
-
-  React.useEffect(() => {
+    
     // handle query params
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -85,7 +76,6 @@ const IndexPage = () => {
   }, []);
 
   async function handleApiResp(wallet) {
-    console.log('handled api response!');
     const options = {method: 'GET'}
     try {
       const collections = await fetch(`https://api.opensea.io/api/v1/collections?offset=0&limit=300&asset_owner=${wallet}`, options);
@@ -139,6 +129,19 @@ const IndexPage = () => {
     return false;
   };
 
+  function handleCurrencyChange(selectedCurrency) {
+    async function getEthToFiat() {
+      //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
+      let response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${selectedCurrency}&ids=ethereum`, {
+        method: 'GET'
+      });
+      response = await response.json();
+      setEthPrice(response[0].current_price);
+      setCurrency(selectedCurrency);
+    }
+    getEthToFiat();
+  }
+
   const filtered = filteredCollections.length > 0 ? filteredCollections : collections;
 
   return (
@@ -181,10 +184,10 @@ const IndexPage = () => {
                       top: 0, 
                       marginLeft: 4, 
                     }}>({currency.toUpperCase()})</sup></Text>}
-                <Box onClick={() => setCurrency('usd')} cursor="pointer" _hover={{
+                <Box onClick={() => handleCurrencyChange('usd')} cursor="pointer" _hover={{
                   opacity: 1
                 }} ml="12px" opacity={currency === 'usd' ? 1 : 0.2}>🇺🇸</Box>
-                <Box onClick={() => setCurrency('cad')} cursor="pointer" _hover={{
+                <Box onClick={() => handleCurrencyChange('cad')} cursor="pointer" _hover={{
                   opacity: 1
                 }} ml="6px" opacity={currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
               </Flex>
