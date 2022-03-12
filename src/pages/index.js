@@ -191,6 +191,7 @@ const IndexPage = () => {
                 <Box onClick={() => handleCurrencyChange('cad')} cursor="pointer" _hover={{
                   opacity: 1
                 }} ml="6px" opacity={currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
+                <Box>{currency}</Box>
               </Flex>
           </Flex>
           <Box mb="2em"> 
