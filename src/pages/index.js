@@ -131,7 +131,6 @@ const IndexPage = () => {
 
   function handleCurrencyChange(selectedCurrency) {
     async function getEthToFiat() {
-      //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
       let response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${selectedCurrency}&ids=ethereum`, {
         method: 'GET'
       });
@@ -143,6 +142,8 @@ const IndexPage = () => {
   }
 
   const filtered = filteredCollections.length > 0 ? filteredCollections : collections;
+
+  console.log('currency: ', currency);
 
   return (
     <main>  
