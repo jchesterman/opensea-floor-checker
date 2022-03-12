@@ -17,6 +17,7 @@ import { useLocalStorage } from "react-use";
 
 
 const IndexPage = () => {
+  const [mounted, setMounted] = React.useState(false);
   const walletRef = React.useRef(null);
   const [collections, setCollections] = React.useState([]);
   const [filteredCollections, setFilteredCollections] = React.useState([]);
@@ -36,6 +37,7 @@ const IndexPage = () => {
   const textAreaRef = React.useRef(null);
 
   React.useEffect(() => {
+    setMounted(true);
     handleCurrencyChange(currency);
   }, [currency]);
 
@@ -189,10 +191,10 @@ const IndexPage = () => {
                     }}>({currency.toUpperCase()})</sup></Text>}
                 <Box onClick={() => handleCurrencyChange('usd')} cursor="pointer" _hover={{
                   opacity: 1
-                }} ml="12px" opacity={currency === 'usd' ? 1 : 0.2}>🇺🇸</Box>
+                }} ml="12px" opacity={mounted && currency === 'usd' ? 1 : 0.2}>🇺🇸</Box>
                 <Box onClick={() => handleCurrencyChange('cad')} cursor="pointer" _hover={{
                   opacity: 1
-                }} ml="6px" opacity={currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
+                }} ml="6px" opacity={mounted && currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
                 <Box>{currency}</Box>
               </Flex>
           </Flex>
