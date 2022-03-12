@@ -13,16 +13,18 @@ import CollectionList from '../components/CollectionList';
 import numeral from 'numeral';
 import {FaHeart, FaPrayingHands} from 'react-icons/fa';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import useLocalStorage from '../hooks/useLocalStorage'; 
+import { useLocalStorage } from "react-use";
+
 
 const IndexPage = () => {
+  const [mounted, setMounted] = React.useState(false);
   const walletRef = React.useRef(null);
   const [collections, setCollections] = React.useState([]);
   const [filteredCollections, setFilteredCollections] = React.useState([]);
   const [numRugged, setNumRugged] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [ethPrice, setEthPrice] = React.useState(null);
-  const [currency, setCurrency] = React.useState('usd');
+  const [currency, setCurrency] = useLocalStorage('currency', 'usd');
   const [walletTotalValue, setWalletTotalValue] = React.useState(null);
   const [totalHolding, setTotalHolding] = React.useState(null);
   const [loaded, setLoaded] = React.useState(false);
@@ -35,6 +37,7 @@ const IndexPage = () => {
   const textAreaRef = React.useRef(null);
 
   React.useEffect(() => {
+    setMounted(true);
     handleCurrencyChange(currency);
   }, [currency]);
 
@@ -64,7 +67,7 @@ const IndexPage = () => {
       'dyor.'
     ];
     setQuote(quotes[Math.floor((Math.random()*quotes.length))]);
-    
+
     // handle query params
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -186,10 +189,10 @@ const IndexPage = () => {
                     }}>({currency.toUpperCase()})</sup></Text>}
                 <Box onClick={() => handleCurrencyChange('usd')} cursor="pointer" _hover={{
                   opacity: 1
-                }} ml="12px" opacity={currency === 'usd' ? 1 : 0.2}>🇺🇸</Box>
+                }} ml="12px" opacity={mounted && currency === 'usd' ? 1 : 0.2}>🇺🇸</Box>
                 <Box onClick={() => handleCurrencyChange('cad')} cursor="pointer" _hover={{
                   opacity: 1
-                }} ml="6px" opacity={currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
+                }} ml="6px" opacity={mounted && currency === 'cad' ? 1 : 0.2}>🇨🇦</Box>
               </Flex>
           </Flex>
           <Box mb="2em"> 
