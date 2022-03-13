@@ -45,6 +45,25 @@ const IndexPage = () => {
   const [copied, setCopied] = React.useState(false);
   const textAreaRef = React.useRef(null);
 
+  const handleCurrencyChange = React.useCallback(
+    selectedCurrency => {
+      async function getEthToFiat() {
+        //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
+        let response = await fetch(
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${selectedCurrency}&ids=ethereum`,
+          {
+            method: 'GET'
+          }
+        );
+        response = await response.json();
+        setEthPrice(response[0].current_price);
+        setCurrency(selectedCurrency);
+      }
+      getEthToFiat();
+    },
+    [setEthPrice, setCurrency]
+  );
+
   React.useEffect(() => {
     setMounted(true);
     if (!mounted) {
@@ -158,25 +177,6 @@ const IndexPage = () => {
     return false;
   }
 
-  const handleCurrencyChange = React.useCallback(
-    selectedCurrency => {
-      async function getEthToFiat() {
-        //let response = await fetch('/api/convert-to-fiat', {method: 'GET'});
-        let response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${selectedCurrency}&ids=ethereum`,
-          {
-            method: 'GET'
-          }
-        );
-        response = await response.json();
-        setEthPrice(response[0].current_price);
-        setCurrency(selectedCurrency);
-      }
-      getEthToFiat();
-    },
-    [setEthPrice, setCurrency]
-  );
-
   const handleChecked = () => {
     if (!rememberWallet) {
       setSavedWallet('');
@@ -207,10 +207,11 @@ const IndexPage = () => {
           <Flex
             mb="20px"
             mt="10px"
-            alignItems="center"
+            alignItems={{base: 'flex-start', md: 'center'}}
             justifyContent="space-between"
+            flexDir={{base: 'column', md: 'row'}}
           >
-            <Text fontSize="18px">
+            <Text fontSize="18px" mb={{base: '10px', md: '0'}}>
               <Link
                 _hover={{
                   textDecoration: 'none'
@@ -218,7 +219,6 @@ const IndexPage = () => {
                 href="/"
               >
                 <strong>OpenSea</strong>
-                <Box as="br" display={{base: 'block', md: 'none'}} />
                 Floor Checker
               </Link>
             </Text>
