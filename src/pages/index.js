@@ -40,7 +40,7 @@ const IndexPage = () => {
     'remember',
     false
   );
-  const [checked, setChecked] = React.useState(false);
+
   const [savedWallet, setSavedWallet] = useLocalStorage('wallet', null);
 
   const [copied, setCopied] = React.useState(false);
@@ -114,10 +114,6 @@ const IndexPage = () => {
       handleApiResp(savedWallet);
     }
   }, [savedWallet, mounted]);
-
-  React.useEffect(() => {
-    setChecked(rememberWallet);
-  }, [rememberWallet]);
 
   async function handleApiResp(wallet) {
     const options = {method: 'GET'};
@@ -237,7 +233,6 @@ const IndexPage = () => {
             </Text>
             <NoSSR fallback={<div />}>
               <HeaderComponents
-                mounted={mounted}
                 currency={currency}
                 rememberWallet={rememberWallet}
                 handleChecked={handleChecked}
