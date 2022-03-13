@@ -177,16 +177,14 @@ const IndexPage = () => {
     return false;
   }
 
-  const handleChecked = () => {
-    if (mounted) {
-      if (!rememberWallet) {
-        setSavedWallet('');
-      } else {
-        setSavedWallet(walletRef.current.value);
-      }
-      setRememberWallet(!rememberWallet);
+  const handleChecked = React.useCallback(() => {
+    if (!rememberWallet) {
+      setSavedWallet('');
+    } else {
+      setSavedWallet(walletRef.current.value);
     }
-  };
+    setRememberWallet(!rememberWallet);
+  }, [setSavedWallet, setRememberWallet, rememberWallet]);
 
   const filtered =
     filteredCollections.length > 0 ? filteredCollections : collections;
