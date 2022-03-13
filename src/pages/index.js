@@ -178,12 +178,14 @@ const IndexPage = () => {
   }
 
   const handleChecked = () => {
-    if (!rememberWallet) {
-      setSavedWallet('');
-    } else {
-      setSavedWallet(walletRef.current.value);
+    if (mounted) {
+      if (!rememberWallet) {
+        setSavedWallet('');
+      } else {
+        setSavedWallet(walletRef.current.value);
+      }
+      setRememberWallet(!rememberWallet);
     }
-    setRememberWallet(!rememberWallet);
   };
 
   const filtered =
