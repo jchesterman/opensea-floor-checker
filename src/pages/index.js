@@ -40,7 +40,7 @@ const IndexPage = () => {
     'remember',
     false
   );
-  const [savedWallet, setSavedWallet] = useLocalStorage('wallet', '');
+  const [savedWallet, setSavedWallet] = useLocalStorage('wallet', null);
 
   const [copied, setCopied] = React.useState(false);
   const textAreaRef = React.useRef(null);
@@ -106,7 +106,13 @@ const IndexPage = () => {
     if (wallet) {
       handleApiResp(wallet);
     }
-  }, [savedWallet]);
+  }, []);
+
+  React.useEffect(() => {
+    if (mounted && savedWallet) {
+      handleApiResp(savedWallet);
+    }
+  }, [savedWallet, mounted]);
 
   async function handleApiResp(wallet) {
     const options = {method: 'GET'};
