@@ -101,7 +101,7 @@ const IndexPage = () => {
     // handle query params
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const wallet = urlParams.get('wallet') || savedWallet;
+    const wallet = urlParams.get('wallet');
     setQueryParam(wallet);
     if (wallet) {
       handleApiResp(wallet);
@@ -177,14 +177,14 @@ const IndexPage = () => {
     return false;
   }
 
-  const handleChecked = React.useCallback(() => {
-    if (!rememberWallet) {
-      setSavedWallet('');
+  const handleChecked = () => {
+    if (!savedWallet) {
+      setSavedWallet(null);
     } else {
       setSavedWallet(walletRef.current.value);
     }
     setRememberWallet(!rememberWallet);
-  }, [setSavedWallet, setRememberWallet, rememberWallet]);
+  };
 
   const filtered =
     filteredCollections.length > 0 ? filteredCollections : collections;
@@ -225,7 +225,7 @@ const IndexPage = () => {
             <Flex mr="6px">
               <Flex fontSize="14px" alignItems="center">
                 <Checkbox
-                  onChange={() => handleChecked()}
+                  onChange={() => mounted && handleChecked()}
                   defaultChecked={rememberWallet}
                   mr="6px"
                 />
