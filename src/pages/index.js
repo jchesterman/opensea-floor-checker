@@ -40,6 +40,7 @@ const IndexPage = () => {
     'remember',
     false
   );
+  const [checked, setChecked] = React.useState(false);
   const [savedWallet, setSavedWallet] = useLocalStorage('wallet', null);
 
   const [copied, setCopied] = React.useState(false);
@@ -113,6 +114,10 @@ const IndexPage = () => {
       handleApiResp(savedWallet);
     }
   }, [savedWallet, mounted]);
+
+  React.useEffect(() => {
+    setChecked(rememberWallet);
+  }, [rememberWallet]);
 
   async function handleApiResp(wallet) {
     const options = {method: 'GET'};
@@ -234,7 +239,7 @@ const IndexPage = () => {
               <Flex fontSize="14px" alignItems="center">
                 <Checkbox
                   onChange={() => mounted && handleChecked()}
-                  isChecked={rememberWallet}
+                  isChecked={checked}
                   mr="6px"
                 />
                 Remember me
