@@ -166,7 +166,9 @@ const IndexPage = () => {
     setCollections([]);
     setLoading(true);
     const wallet = walletRef.current.value;
-    setSavedWallet(wallet);
+    if (rememberWallet) {
+      setSavedWallet(wallet);
+    }
     if (!wallet) return;
     window.history.replaceState({}, '', `/?wallet=${wallet}`);
     handleApiResp(wallet);
@@ -232,7 +234,7 @@ const IndexPage = () => {
               <Flex fontSize="14px" alignItems="center">
                 <Checkbox
                   onChange={() => mounted && handleChecked()}
-                  defaultChecked={rememberWallet}
+                  isChecked={rememberWallet}
                   mr="6px"
                 />
                 Remember me
