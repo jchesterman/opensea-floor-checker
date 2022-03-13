@@ -25,6 +25,7 @@
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11.8.0",
     "@emotion/styled": "^11.8.0",
+    "@mpth/react-no-ssr": "^1.0.1",
     "axios": "^0.26.0",
     "framer-motion": "^6.2.6",
     "gatsby": "^4.7.2",
