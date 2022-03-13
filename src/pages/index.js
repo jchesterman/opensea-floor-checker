@@ -305,7 +305,9 @@ const IndexPage = () => {
                   name="wallet"
                   ref={walletRef}
                   placeholder={
-                    queryParam || savedWallet || 'Enter wallet address'
+                    queryParam ||
+                    (mounted && savedWallet) ||
+                    'Enter wallet address'
                   }
                 />
                 {loading ? (
